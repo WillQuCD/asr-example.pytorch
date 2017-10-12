@@ -1,0 +1,4 @@
+*.pyc
+data/*.pyc
+*.log
+*.mdl
