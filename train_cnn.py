@@ -69,7 +69,7 @@ def train(args):
             optimizer.step()
         cross_validate(epoch, nnet, test_dataset, test_loader)    
         # th.save(nnet, 'mdl/dnn.{}.mdl'.format(epoch + 1))
-        th.save(nnet.state_dict(), os.path.join(args.checkout_dir, 'cnn.{}.pkl'.format(epoch + 1)))
+        th.save(nnet, os.path.join(args.checkout_dir, 'cnn.{}.pkl'.format(epoch + 1)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
