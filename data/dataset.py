@@ -3,10 +3,15 @@
 # wujian@17.10.5
 
 import os 
+import logging
 import torch as th
 import numpy as np
 import torch.utils.data as data
 import kaldi_reader as reader
+
+logging.basicConfig(level=logging.INFO, 
+    format='%(filename)s[%(lineno)d] %(asctime)s %(levelname)s: %(message)s', 
+    datefmt="%Y-%M-%d %T")
 
 class SpliceDev():
     def __init__(self, left_context, right_context):
@@ -78,7 +83,7 @@ class THCHS30(data.Dataset):
                 # [0, t1, t2, ...]
                 self.idx_bounds.append(self.num_frames)
 
-        print('load {num_frames} frames from {ark}'.format(num_frames=self.num_frames, ark=feats))
+        logging.info('load {num_frames} frames from {ark}'.format(num_frames=self.num_frames, ark=feats))
 
     def index_to_uttid(self, index):
 
@@ -121,8 +126,7 @@ def test_dataset():
                                     shuffle=True)
 
     for feats, labels in test_loader:
-        print feats
-        print labels
+        pass
 
 def test_splice_dev():
     feats_egs = np.ones([5, 5])

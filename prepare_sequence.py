@@ -57,36 +57,23 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Prepare sequence data for RNN trainning and \
-            write in hdf5 format'
-    )
+        description='Prepare sequence data for RNN trainning and write in hdf5 format')
     parser.add_argument('feats', type=str, 
-        help='input feats in kaldi *.ark format'
-    )
+                        help="""input feats in kaldi *.ark format""")
     parser.add_argument('label', type=str,
-        help='input label according to the feats feeded before'
-    )
+                        help="""input label according to the feats feeded before""")
     parser.add_argument('-t', '--timesteps', 
-        dest='timesteps', type=int,
-        default=20,
-        help='length of utterance segment'
-    )
+                        dest='timesteps', type=int, default=20,
+                        help="""length of utterance segment""")
     parser.add_argument('-d', '--timedelay', 
-        dest='timedelay', type=int,
-        default=5,
-        help='time delay of the labels'
-    )
+                        dest='timedelay', type=int, default=5,
+                        help="""time delay of the labels""")
     parser.add_argument('-o', '--output-dir', 
-        dest='out_dir', type=str,
-        default='',
-        help='direction of the output file'
-    )
+                        dest='out_dir', type=str, default='',
+                        help="""direction of the output file""")
     parser.add_argument('-p', '--prefix', 
-        dest='prefix', type=str,
-        default='',
-        help='the prefix of the output file'
-    )
-
+                        dest='prefix', type=str, default='',
+                        help="""the prefix of the output file""")
     args = parser.parse_args()
     print(args)
     main(args)

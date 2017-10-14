@@ -3,11 +3,15 @@
 # wujian@17.10.5
 
 import os 
+import logging
 import torch as th
 import numpy as np
 import h5py as hp
 import torch.utils.data as data
 
+logging.basicConfig(level=logging.INFO, 
+    format='%(filename)s[%(lineno)d] %(asctime)s %(levelname)s: %(message)s', 
+    datefmt="%Y-%M-%d %T")
 
 class THCHS30(data.Dataset):
     def __init__(self, root, data_type):
@@ -23,10 +27,13 @@ class THCHS30(data.Dataset):
             self.keys.append(key)
         assert len(self.keys) == len(self.labels_h5)
         self.size = len(self.keys)
-        self.num_frames = self.size * 20
-        print('Load {num} sequence / {nframes} frames in {model} file'.format(
+        self.num_frames = self.size * self.sequence_len()
+        logging.info('Load {num} sequence(frames = {nframes}) in {model} file'.format(
             num=self.size, nframes=self.num_frames, model=data_type)
         )
+    def sequence_len(self):
+        key = self.keys[0]
+        return self.labels_h5[key][:].size
 
     def __len__(self):
         return self.size
@@ -45,7 +52,7 @@ def test():
                                     batch_size=128,
                                     shuffle=True)
     for feats, labels in test_loader:
-        print labels
+        pass
 
 if __name__ == '__main__':
     test()

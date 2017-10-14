@@ -50,5 +50,6 @@ $cmd JOB=1:$nj $decode_dir/log/decode.JOB.log $read_feats \| pytorch/compute-pos
     $gmm_mdl $graph_dir/HCLG.fst ark:- "ark:|gzip -c > $decode_dir/lat.JOB.gz" || exit 1;
 
 pytorch/score.sh $scoring_opts $data_dir $graph_dir $decode_dir || exit 1;
+cp $mdl $decode_dir || exit 1
 
 echo "Decode and scoring done!"

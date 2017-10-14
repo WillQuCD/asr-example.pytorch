@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
+# wujian@17.10.8
 
 import sys
 import argparse
@@ -7,13 +8,14 @@ import numpy as np
 import torch as th
 import torch.nn as nn
 
+from model import DNN
 from torch.autograd import Variable
 
 import data.kaldi_reader as reader
 
+
 def compute_posteriors(args, src_fd, dst_fd):
-    # nnet = CNN(left_context + right_context + 1, feat_dim, num_maps, pooling_size, band_size, conn_dim, num_classes)
-    # nnet.load_state_dict(th.load(mdl))
+    # nnet.load_state_dict(th.load(args.model))
     nnet = th.load(args.model)
     nnet.eval()
     nnet.cpu()
@@ -24,7 +26,7 @@ def compute_posteriors(args, src_fd, dst_fd):
     # RNN: input no splice(as a utterance), shape as batch, timesteps, feats_dim
     # DNN: input spliced
     while True: 
-        key = reader.read_key(src_fd):
+        key = reader.read_key(src_fd)
         if not key:
             break
         mat = reader.read_common_mat(src_fd)

@@ -7,7 +7,7 @@ import torch.nn as nn
 
 
 class DNN(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes, hidden_layer=3, 
+    def __init__(self, input_size, hidden_layer, hidden_size, num_classes, 
             batchnorm=True, dropout=0.0, activate='relu'):
         super(DNN, self).__init__()
         assert hidden_layer
