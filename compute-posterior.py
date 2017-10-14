@@ -52,28 +52,19 @@ if __name__ == '__main__':
     parser.add_argument("feats", help="path of the feeding features") 
     parser.add_argument("posts", help="path of the output posteriors") 
     parser.add_argument('-d', '--feats-dim', 
-        dest='feats_dim', type=int,
-        default=40,
-        help='dimention of the input features'
-    )
+                        dest='feats_dim', type=int, default=40,
+                        help='dimention of the input features')
     parser.add_argument('-l', '--left-context', 
-        dest='left_context', type=int,
-        default=0,
-        help='left context of the neural networt'
-    )
+                        dest='left_context', type=int, default=0,
+                        help='left context of the neural networt')
     parser.add_argument('-r', '--right-context', 
-        dest='right_context', type=int,
-        default=0,
-        help='right context of the neural networt'
-    )
+                        dest='right_context', type=int, default=0,
+                        help='right context of the neural networt')
     parser.add_argument('-t', '--model-type', 
-        dest='model_type', type=str,
-        default='dnn',
-        help='type of the neural network[dnn/cnn/rnn]'
-    )
+                        dest='model_type', type=str, default='dnn',
+                        help='type of the neural network[dnn/cnn/rnn]')
     args = parser.parse_args()
     assert args.model_type in ['dnn', 'cnn', 'rnn']
-
     src_fd = open(args.feats, 'rb') if args.feats != '-' else sys.stdin
     dst_fd = open(args.posts, 'wb') if args.posts != '-' else sys.stdout
     compute_posteriors(args, src_fd, dst_fd)

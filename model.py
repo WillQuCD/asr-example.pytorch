@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import math
 import torch as th
 import torch.nn as nn
 
+import common
 
 class DNN(nn.Module):
     def __init__(self, input_size, hidden_layer, hidden_size, num_classes, 
@@ -31,9 +31,11 @@ class DNN(nn.Module):
         return x
 
 class BatchNormRNN(nn.Module):
-    def __init__(self, input_size, output_size, rnn_type=nn.GRU, dropout=0.0):
+    def __init__(self, input_size, output_size, rnn_type=nn.GRU, \
+            dropout=0.0, residual=False):
         super(BatchNormRNN, self).__init__()
         self.batch_norm = nn.BatchNorm1d(input_size)
+        self.residual   = residual
         self.inner_rnn  = rnn_type(
             input_size=input_size,
             hidden_size=output_size,
@@ -42,14 +44,16 @@ class BatchNormRNN(nn.Module):
         )
     
     def forward(self, x):
-        # print 'i BN: {}'.format(x.shape)
+        if self.residual:
+            residual = x
         n, t = x.size(0), x.size(1)
         x = x.contiguous().view(n * t, -1)
         # first batch_norm then rnn
         x = self.batch_norm(x)
         x = x.view(n, t, -1)
         x, _ = self.inner_rnn(x)
-        # print 'o BN: {}'.format(x.shape)
+        if self.residual:
+            x = x + residual
         return x
 
 rnn_type_map = {
@@ -60,13 +64,15 @@ rnn_type_map = {
 
 class RNN(nn.Module):
     def __init__(self, input_size, hidden_layer, hidden_size, num_classes, 
-            rnn_type='gru', dropout=0.0):
+            rnn_type='gru', dropout=0.0, residual=False):
         super(RNN, self).__init__()
         assert rnn_type in ['lstm', 'gru', 'rnn']
         inner_rnn = rnn_type_map[rnn_type]
-        layer = [BatchNormRNN(input_size, hidden_size, rnn_type=inner_rnn, dropout=dropout), ]
+        layer = [BatchNormRNN(input_size, hidden_size, \
+                rnn_type=inner_rnn, dropout=dropout), ]
         for i in range(hidden_layer):
-            layer.append(BatchNormRNN(hidden_size, hidden_size, rnn_type=inner_rnn, dropout=dropout))
+            layer.append(BatchNormRNN(hidden_size, hidden_size, \
+                    rnn_type=inner_rnn, dropout=dropout, residual=residual))
         self.mrnn = nn.Sequential(*layer)
         self.conn = nn.Sequential(
             nn.BatchNorm1d(hidden_size),
@@ -80,8 +86,6 @@ class RNN(nn.Module):
         x = self.conn(x)
         return x
 
-def get_output_size(input_size, padding_size, kernel_size, stride):
-    return int(math.floor((input_size + 2 * padding_size - (kernel_size - 1) - 1) / stride + 1))
 
 class CNN(nn.Module):
     def __init__(self, time_step, feat_dim, num_maps,
@@ -96,9 +100,9 @@ class CNN(nn.Module):
             ),
             nn.ReLU(),
         )
-        size_after_conv = get_output_size(feat_dim, 0, filter_size, 1)
+        size_after_conv = common.get_conv_output_size(feat_dim, 0, filter_size, 1)
         self.maxpool = nn.MaxPool1d(kernel_size=pooling_size)
-        size_after_pool = get_output_size(size_after_conv, 0, pooling_size, pooling_size) 
+        size_after_pool = common.get_conv_output_size(size_after_conv, 0, pooling_size, pooling_size) 
         self.conn    = nn.Sequential(
             nn.Linear(num_maps * size_after_pool, conn_dim),
             nn.Dropout(p=0.2),
