@@ -5,6 +5,7 @@
 * `model.py` implements some basic acoustic models(CNN/DNN/RNN/ResNet……)
 * `data/dataset.py` is a simple wrapper of training corpus for DNN/CNN.
 * `prepare_*.py` are some scripts for data pre-processing.
+* updating……
 
 ### TIMIT(test set)
 
@@ -27,4 +28,6 @@
 | CNN(K8,P6,C256) + DNN(2X512) + BN + Dropout  |  24.82% |
 |       GRU(3X512,T=20) + BN + Dropout         |  26.64% |
 |      GRU(3X512,T=100) + BN + Dropout         |  24.66% |
+|      GRU(10X256,T=100) + BN + Dropout        |  24.39% |
+|     Res-GRU(10X256,T=100) + BN + Dropout     |  24.24% |
 |        DNN(3X1024) + BN + Dropout            |  23.54% |
