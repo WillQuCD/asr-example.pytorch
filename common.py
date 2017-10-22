@@ -19,21 +19,14 @@ def join_path(prefix, name):
 
 def get_conv_output_size(input_size, padding_size, kernel_size, stride):
     return int(math.floor((input_size + 2 * padding_size - (kernel_size - 1) - 1) / stride + 1))
+ 
 
 def get_logger():
     logger      = logging.getLogger("scripts")
     logger.setLevel(logging.INFO) 
-    log_fmt     = "%(filename)s[%(lineno)d] %(asctime)s %(levelname)s: %(message)s",
+    log_fmt     = "%(filename)s[%(lineno)d] %(asctime)s %(levelname)s: %(message)s"
     date_fmt    = "%Y-%M-%d %T"
     logging.basicConfig(level=logging.INFO, format=log_fmt, datefmt=date_fmt)
-    #handler = logging.StreamHandler()  
-    #handler.setLevel(logging.INFO) 
-    #formatter =logging.Formatter(
-    #    fmt='%(filename)s[%(lineno)d] %(asctime)s %(levelname)s: %(message)s',
-    #    datefmt="%Y-%M-%d %T"
-    #)
-    #handler.setFormatter(formatter)
-    #logger.addHandler(handler)
     return logger
 
 def cross_validate(nnet, test_loader, is_rnn=False):

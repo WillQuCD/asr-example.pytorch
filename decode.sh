@@ -42,7 +42,7 @@ feats_dim=$(feat-to-dim scp:$split_data_dir/1/feats.scp -) || exit 1
     --left-context=$left_context --right-context=$right_context ark:- ark:-" && \
     context_opts="--left-context $left_context --right-context $right_context"
 
-$cmd JOB=1:$nj $decode_dir/log/decode.JOB.log $read_feats \| pytorch/compute-posterior.py \
+$cmd JOB=1:$nj $decode_dir/log/decode.JOB.log $read_feats \| pytorch/compute_posterior.py \
     --feats-dim $feats_dim --model-type $model_type $context_opts $mdl - - \| \
     latgen-faster-mapped --min-active=$min_active --max-active=$max_active \
     --max-mem=$max_mem --beam=$beam --lattice-beam=$lattice_beam --acoustic-scale=$acwt \

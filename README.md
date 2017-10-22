@@ -2,7 +2,7 @@
 
 * `compute-posterior.py` gives outputs(posteriors) of the pytorch model which feed the command `latgen-faster-mapped` in [kaldi](https://github.com/kaldi-asr/kaldi).
 * `decode.sh` combines kaldi command and pytorch model, generating the recognized lattice and scoring the WER/CER.
-* `model.py` implements some basic acoustic models(CNN/DNN/RNN/ResNet……)
+* `model.py` implements some basic acoustic models(CNN/DNN/RNN/TDNN/ResNet……)
 * `data/dataset.py` is a simple wrapper of training corpus for DNN/CNN.
 * `prepare_*.py` are some scripts for data pre-processing.
 * updating……
